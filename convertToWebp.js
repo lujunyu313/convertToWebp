@@ -115,7 +115,7 @@ var done = function() {
         async.eachLimit(files, 50, function(file, cb) {
           async.waterfall([
 
-            function(callback) { //查找输出目录，若不存在则新建
+            function(callback) { 
               /*
                *分离路径和文件名
                */
@@ -123,17 +123,13 @@ var done = function() {
               var name = url.pop();
               var len = name.length;
               var dir = path.join(output_dir, file.slice(res_dir.length, file.length - len));
-              mkdirSync(dir);
+              
+              mkdirSync(dir); //查找输出目录，若不存在则新建
 
               var outFile = path.join(dir, name);
-              callback(null, outFile);
-            },
-            function(outFile, callback) { //匹配png和jpg文件，转换成webp文件
-              if (/(\.png)/.test(outFile)) {
-                outFile = outFile.replace(/(\.png)/, ".webp");
-              } else if (/(\.jpg)/.test(outFile)) {
-                outFile = outFile.replace(/(\.jpg)/, ".webp");
-              }
+
+              //匹配png和jpg文件，转换成webp文件
+              outFile = outFile.replace(/(\.png)|(\.jpg)/, ".webp");
               callback(null, outFile);
             },
             function(outFile, callback) { //转换并输出webp文件
