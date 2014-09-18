@@ -1,0 +1,2 @@
+convert:
+	node convertToWebp
